@@ -4,21 +4,34 @@
 require 'Soundcloud.php' ;
 
 
+
 //put this in seperate file
 $soundcloud = new Services_Soundcloud('b2a3991985725a0f8ecca732a197f0fc' ,
 				 '601b9a2b451a09fcaf93b5e2c70c9e66' ,
 				 'http://sndcldtst.heliohost.org/SndCldTEst/') ;
+		
+		
 				 
 //check what this does
 //$soundcloud->setDevelopment(FALSE);
 
-//url from array of 
+
+
+/*url from array of??
+returns url to soundcloud.com/connect containing client id and secret, responce type=code and
+redirect uri set in services() 
+after link followed and user signed into soundcloud(Oauth2?), 'code' is in url*/
 $authorizeUrl = $soundcloud->getAuthorizeUrl();
+
+
 
 echo "<pre>";
 
 echo "<a href='$authorizeUrl'> Connect with SoundCloud</a>" ;
 
+
+/*Obtain 'code' in order to request a access token. input this into function. returns array which 
+includes access token*/
 try {
     $accessToken = $soundcloud->accessToken($_GET['code']);
 	print_r($accessToken);
