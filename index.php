@@ -4,17 +4,20 @@
 require 'Soundcloud.php' ;
 
 
+session_start();
+// sort out session_destroy();
+
 
 //put this in seperate file
 //creates new instance of class and calls contructor that takes vars from soundcloud api .com
 $soundcloud = new Services_Soundcloud('b2a3991985725a0f8ecca732a197f0fc' ,
 				 '601b9a2b451a09fcaf93b5e2c70c9e66' ,
-				 'http://sndcldtst.heliohost.org/SndCldTEst/') ;
+				 'http://scapi.rrshost.in/test/') ;
 		
 		
 				 
 //check what this does
-//$soundcloud->setDevelopment(FALSE);
+$soundcloud->setDevelopment(false);
 
 
 
@@ -33,11 +36,36 @@ echo "<pre>";
 echo "<a href='$authorizeUrl'> Connect with SoundCloud</a>" ;
 
 
-/*Obtain 'code' in order to request a access token. input this into function. returns array which 
-includes access token*/
+
 try {
-    $accessToken = $soundcloud->accessToken($_GET['code']);
-	print_r($accessToken);
+		/*
+		 * check if SESSION is set to access token returned from sc
+		 * will only work if code is returned in URL
+		 */
+		if(!isset($_SESSION['mytoken'])){
+			
+			/*Obtain 'code' in order to request a access token. input this into function. returns array which 
+			includes access token*/
+			
+			$accessToken = $soundcloud->accessToken($_GET['code']);
+			
+			print_r($accessToken);
+			//set SESSION to access token(from accesstoken array)
+			$_SESSION['mytoken'] = $accessToken['access_token'];
+			
+			
+	
+		}
+		else{
+			
+			//print_r($_session['mytoken']);
+			print_r($_SESSION) ;
+			/*set our classes accesstoken to the session data(set after following initial
+			connect to soundcloud link)
+			 */
+			$soundcloud->setAccessToken = $_SESSION['mytoken'];
+			print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
+		}
 	/* 
 	invalid_http_responce_code exception_(a custom exception) is thrown from _request() which
 	does HTTP request using cURL
@@ -52,16 +80,17 @@ try {
 }
 
 
-
+/*
 try {
 	/*
 	json_decode returns ass aray
 	$soundcloud->get() returns a _request()
-	*/
+	/
     $me = json_decode($soundcloud->get('me'), true);
 	print_r($me);
 } catch (Services_Soundcloud_Invalid_Http_Response_Code_Exception $e) {
     exit($e->getMessage());
 }
+*/
 
-
+?>
