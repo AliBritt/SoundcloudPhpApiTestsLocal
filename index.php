@@ -17,7 +17,7 @@ $soundcloud = new Services_Soundcloud('b2a3991985725a0f8ecca732a197f0fc' ,
 		
 				 
 //check what this does
-$soundcloud->setDevelopment(false);
+$soundcloud->setDevelopment(FALSE);
 
 
 
@@ -42,7 +42,7 @@ try {
 		 * check if SESSION is set to access token returned from sc
 		 * will only work if code is returned in URL
 		 */
-		if(!isset($_SESSION['mytoken'])){
+		if(!isset($_SESSION['toke'])){
 			
 			/*Obtain 'code' in order to request a access token. input this into function. 
 			 * returns array which includes access token*/
@@ -51,7 +51,7 @@ try {
 			
 			//print_r($accessToken);
 			//set SESSION to access token(from accesstoken array)
-			$_SESSION['mytoken'] = $accessToken['access_token'];
+			$_SESSION['toke'] = $accessToken['access_token'];
 			
 			/*why use session at all? 
 			 * why not skip straight to defining class property accessToken to our 'access_token' from array
@@ -66,14 +66,14 @@ try {
 		 */
 		else{
 			
-			//print_r($_session['mytoken']);
+			//print_r($_session['token']);
 			//print_r($_SESSION) ;
 			
 			/*set our classes accesstoken property to the session data(set after following initial
 			connect to soundcloud link) this will happen on refresh of page
 			 */
-			$soundcloud->setAccessToken = $_SESSION['mytoken'];
-			//print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
+			$soundcloud->setAccessToken = $_SESSION['toke'];
+			print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
 		}
 	/* 
 	invalid_http_responce_code exception_(a custom exception) is thrown from _request() which
@@ -87,7 +87,10 @@ try {
 	*/
     exit($e->getMessage());
 }
-
+/*1st time through the below code works. second time it doesnt.
+ *  on first run session is not set, get code is used and then session set.
+ *  second time session is set and accesstoken property is assigned to session data.
+ */
 try {
 	/*
 	json_decode returns ass aray
@@ -100,5 +103,5 @@ try {
 
 }
 
-
+//session_destroy();
 ?>
