@@ -1,11 +1,11 @@
 <?php
 // testing basic functions of soundcloud php api 
 
-require 'Soundcloud.php' ;
-
-
 session_start();
 // sort out session_destroy();
+
+
+require 'Soundcloud.php' ;
 
 
 //put this in seperate file
@@ -44,34 +44,43 @@ try {
 		 */
 		if(!isset($_SESSION['mytoken'])){
 			
-			/*Obtain 'code' in order to request a access token. input this into function. returns array which 
-			includes access token*/
+			/*Obtain 'code' in order to request a access token. input this into function. 
+			 * returns array which includes access token*/
 			
 			$accessToken = $soundcloud->accessToken($_GET['code']);
 			
-			print_r($accessToken);
+			//print_r($accessToken);
 			//set SESSION to access token(from accesstoken array)
 			$_SESSION['mytoken'] = $accessToken['access_token'];
+			
+			/*why use session at all? 
+			 * why not skip straight to defining class property accessToken to our 'access_token' from array
+			 * ie $soundcloud->setAccessToken = $accessToken['access_token'];
+			 * would have to run this code every time though
+			 */
 			
 			
 	
 		}
+		/*if the session already has the access token
+		 */
 		else{
 			
 			//print_r($_session['mytoken']);
-			print_r($_SESSION) ;
-			/*set our classes accesstoken to the session data(set after following initial
-			connect to soundcloud link)
+			//print_r($_SESSION) ;
+			
+			/*set our classes accesstoken property to the session data(set after following initial
+			connect to soundcloud link) this will happen on refresh of page
 			 */
 			$soundcloud->setAccessToken = $_SESSION['mytoken'];
-			print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
+			//print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
 		}
 	/* 
 	invalid_http_responce_code exception_(a custom exception) is thrown from _request() which
 	does HTTP request using cURL
 	($e)is an object containing the exception information
 	*/
-} catch (Services_Soundcloud_Invalid_Http_Response_Code_Exception $e) {
+}  catch (Services_Soundcloud_Invalid_Http_Response_Code_Exception $e) {
 	/*
 	getMessage() is a method of Exception()
 	returns string set in custom exception
@@ -79,18 +88,17 @@ try {
     exit($e->getMessage());
 }
 
-
-/*
 try {
 	/*
 	json_decode returns ass aray
 	$soundcloud->get() returns a _request()
-	/
+	*/
     $me = json_decode($soundcloud->get('me'), true);
 	print_r($me);
 } catch (Services_Soundcloud_Invalid_Http_Response_Code_Exception $e) {
     exit($e->getMessage());
+
 }
-*/
+
 
 ?>
