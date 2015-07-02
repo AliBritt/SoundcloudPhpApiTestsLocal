@@ -35,6 +35,8 @@ echo "<pre>";
 
 echo "<a href='$authorizeUrl'> Connect with SoundCloud</a>" ;
 
+//echo "<a href= 'http://scapi.rrshost.in/test/sessDes.php'>Destroy Session</a> ";
+
 
 
 try {
@@ -72,8 +74,8 @@ try {
 			/*set our classes accesstoken property to the session data(set after following initial
 			connect to soundcloud link) this will happen on refresh of page
 			 */
-			$soundcloud->setAccessToken = $_SESSION['toke'];
-			print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
+			$soundcloud->setAccessToken($_SESSION['toke']);
+			//print_r (" function = " . $soundcloud->setAccessToken . "<br/>");
 		}
 	/* 
 	invalid_http_responce_code exception_(a custom exception) is thrown from _request() which
@@ -97,11 +99,29 @@ try {
 	$soundcloud->get() returns a _request()
 	*/
     $me = json_decode($soundcloud->get('me'), true);
-	print_r($me);
+	//print_r($me);
+	//create var with userid returned from $me array
+	//sc->get takes tracks as url and the array with user id as parameters
+	$tracks = json_decode($soundcloud->get('tracks' , array('user_id' =>'177803')), true);
+	//print_r($tracks);
+	
 } catch (Services_Soundcloud_Invalid_Http_Response_Code_Exception $e) {
     exit($e->getMessage());
 
 }
-
+// post comment
+/*try {
+	/* sc->post takes tracks/trackid/comments as url and array comment body as parameter
+	 * this is different to git docs
+	 * works fine without json_decode
+	 */
+/*	$commment = json_decode($soundcloud->post('tracks/196549988/comments', array(
+	'comment[body]' => 'posting comment from soundcloud api wrap')
+		)
+	);
+		
+}catch (Services_Soundcloud_Invalid_Http_Responce_code_exception $e) {
+	exit($e->getMessage());
+}*/
 //session_destroy();
 ?>
