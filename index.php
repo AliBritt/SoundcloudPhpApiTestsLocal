@@ -109,6 +109,41 @@ try {
     exit($e->getMessage());
 
 }
+
+//search by genre and bpm
+
+// find all tracks with the genre 'punk' that have a tempo greater than 120 bpm.
+$tracksSearchGenre = json_decode($soundcloud->get('tracks', array('genres' => 'techno', 'bpm[from]' => 110)), true);
+
+//print_r($tracksSearchGenre);
+
+
+//search for a user
+
+$username = 'ali britt';
+
+$tracksSearchQ = json_decode($soundcloud->get('tracks', array('q' => $username)), true);
+
+print_r($tracksSearchQ );
+
+
+
+//Embedding a SoundCloud Widget
+/*
+$soundcloud->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => 1));
+
+try{
+	$track_url = 'https://soundcloud.com/alibritt/o-bi-o-ba';
+	$embed_info = json_decode($soundcloud->get('oembed', array('url' => $track_url)));
+
+	// render the html for the player widget
+	print $embed_info->html;
+	
+}catch (Services_Soundcloud_Invalid_Http_Response_Code_Exception $e) {
+    exit($e->getMessage());
+
+}
+ * */
 // post comment
 /*try {
 	/* sc->post takes tracks/trackid/comments as url and array comment body as parameter
