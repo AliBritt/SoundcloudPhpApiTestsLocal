@@ -1,0 +1,1 @@
+Soundcloud php api wrapper test for local host(embed not working on server due to safe mode(?).scUserSearch.php searches for tracks and embeds results
